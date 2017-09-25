@@ -24,7 +24,7 @@ with open('data/AFINN-111.txt', 'r') as AFINN_file:
 
 # going through the EN messages, calculating the overall tweet sentiment
 processed_count = 0
-for row in rdb_cur.execute('select rowid, tweet_text from tweet where upper(lang) = "EN"'):
+for row in rdb_cur.execute('select rowid, tweet_text from tweet where upper(lang) like "EN%"'):
     tweet_sentiment = 0
     for word in row[1].split():
         tweet_sentiment += int(AFINN.get(word, 0))
