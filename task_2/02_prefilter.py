@@ -1,17 +1,15 @@
 #!/usr/bin/env python3.6
 
-import csv
 import datetime
 import io
 import re
 import pyarrow as pa
+import task_2_mod as g
 
 ################################################################################
 # Global
 ################################################################################
 DEST_FS_TYPE = 'HDFS'
-IN_HDFS_DIR  = '/mts/task_2/incoming'
-OUT_HDFS_DIR = '/mts/task_2/staging'
 
 ################################################################################
 # Initialization
@@ -30,7 +28,7 @@ else:
 
 
 # going through the list of files
-for in_file_name in hdfs.ls(IN_HDFS_DIR):
+for in_file_name in hdfs.ls(g.INCOMING_DIR):
 
     print('Checking the file: ' + in_file_name + '. ', end='');
 
@@ -49,7 +47,7 @@ for in_file_name in hdfs.ls(IN_HDFS_DIR):
         print('Skipping the fine as there is no header.')
         continue
 
-    out_file_name = OUT_HDFS_DIR + '/' + in_file_name.split('/')[-1]
+    out_file_name = g.STAGING_DIR + '/' + in_file_name.split('/')[-1]
     rej_file_name = out_file_name + '.rejected'
     out_file = hdfs.open(out_file_name, 'wb')
     rej_file = hdfs.open(rej_file_name, 'wb')
@@ -70,6 +68,9 @@ for in_file_name in hdfs.ls(IN_HDFS_DIR):
     in_memf.close()
     out_file.close()
     rej_file.close()
+
+    # renaming the input file to '*.processed'
+    hdfs.rename(in_file_name, in_file_name + '.processed')
 
     # removing the 'rejected' file if it's empty
     if no_records_rejected == 0:

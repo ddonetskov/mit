@@ -2,9 +2,12 @@
 
 import csv
 import datetime
+import time
 import random
 
 import pyarrow as pa
+
+import task_2_mod as g
 
 ################################################################################
 # Global
@@ -38,7 +41,7 @@ for fn in range(1,10):
         file_name = 'data/data' + str(fn) + '.csv'
         csvfile = open(file_name, 'w', newline='')
     elif DEST_FS_TYPE == 'HDFS':
-        file_name = '/mts/task_2/incoming/' + str(fn) + '.csv'
+        file_name = g.INCOMING_DIR + '/' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H%M%S') + '_' + str(fn) + '.csv'
         csvfile = hdfs.open(file_name, 'wb')
     print('Created the ' + DEST_FS_TYPE + ' file ' + file_name + '. Writing data into it...', end='')
     csvwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
