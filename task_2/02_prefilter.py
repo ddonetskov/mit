@@ -47,8 +47,8 @@ for in_file_name in hdfs.ls(g.INCOMING_DIR):
         print('Skipping the fine as there is no header.')
         continue
 
-    out_file_name = g.STAGING_DIR + '/' + in_file_name.split('/')[-1]
-    rej_file_name = out_file_name + '.rejected'
+    out_file_name = g.STAGING_DIR +  '/' + in_file_name.split('/')[-1]
+    rej_file_name = g.REJECTED_DIR + '/' + in_file_name.split('/')[-1]
     out_file = hdfs.open(out_file_name, 'wb')
     rej_file = hdfs.open(rej_file_name, 'wb')
 
