@@ -4,20 +4,16 @@ import datetime
 import io
 import re
 import pyarrow as pa
-import task_2_mod as g
 
-################################################################################
-# Global
-################################################################################
-DEST_FS_TYPE = 'HDFS'
+import t2_common as g
 
 ################################################################################
 # Initialization
 ################################################################################
 
-if DEST_FS_TYPE == 'FS':
+if g.DEST_FS_TYPE == 'FS':
     pass
-elif DEST_FS_TYPE == 'HDFS':
+elif g.DEST_FS_TYPE == 'HDFS':
     hdfs = pa.hdfs.connect()
 else:
     raise Exception("Unknown file system.")

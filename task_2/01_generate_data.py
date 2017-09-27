@@ -7,12 +7,7 @@ import random
 
 import pyarrow as pa
 
-import task_2_mod as g
-
-################################################################################
-# Global
-################################################################################
-DEST_FS_TYPE = 'HDFS'
+import t2_common as g
 
 ################################################################################
 # Initialization
@@ -21,29 +16,25 @@ DEST_FS_TYPE = 'HDFS'
 # initialize the randomizer, it's required to generate the data
 random.seed()
 
-if DEST_FS_TYPE == 'FS':
+if g.DEST_FS_TYPE == 'FS':
     pass
-elif DEST_FS_TYPE == 'HDFS':
+elif g.DEST_FS_TYPE == 'HDFS':
     hdfs = pa.hdfs.connect()
 else:
     raise Exception("Unknown file system.")
-
-#fieldnames = ['id', 'type', 'value', 'business_date']
-#csvwriter = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
-#csvwriter.writeheader()
 
 ################################################################################
 # Generation
 ################################################################################
 
 for fn in range(1,10):
-    if DEST_FS_TYPE == 'FS':
+    if g.DEST_FS_TYPE == 'FS':
         file_name = 'data/data' + str(fn) + '.csv'
         csvfile = open(file_name, 'w', newline='')
-    elif DEST_FS_TYPE == 'HDFS':
+    elif g.DEST_FS_TYPE == 'HDFS':
         file_name = g.INCOMING_DIR + '/' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H%M%S') + '_' + str(fn) + '.csv'
         csvfile = hdfs.open(file_name, 'wb')
-    print('Created the ' + DEST_FS_TYPE + ' file ' + file_name + '. Writing data into it...', end='')
+    print('Created the ' + g.DEST_FS_TYPE + ' file ' + file_name + '. Writing data into it...', end='')
     csvwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
     csvfile.write('id, type, value, business_date\n')    
     for i in range(0,100):
@@ -59,8 +50,4 @@ for fn in range(1,10):
         csvwriter.writerow(csv_row)
     print('Done.')
     csvfile.close()
-
-################################################################################
-# Finalization
-################################################################################
 
