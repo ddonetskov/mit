@@ -1,11 +1,11 @@
 #!/usr/bin/env python3.6
 
 import datetime
-# import io
 import pyarrow as pa
 import re
 import sys
-import task_2_mod as g
+
+import t2_common as g
 
 ################################################################################
 # Initialization
@@ -37,7 +37,7 @@ for line in sys.stdin:
         if out_file != None:
             out_file.close();
         # create the new file according to the date
-        key_date = datetime.datetime.strptime(key, '"%Y-%m-%d"')
+        key_date = datetime.datetime.strptime(key, '%Y-%m-%d')
         out_file_name = g.ARCHIVE_DIR + '/' + str(key_date.year) + '/' + str(key_date.month) + '/' + str(key_date.day) + '/data.csv'
         out_file = hdfs.open(out_file_name, 'wb')
         print('Created the file ' + out_file_name)
